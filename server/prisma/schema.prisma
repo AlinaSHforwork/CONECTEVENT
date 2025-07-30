@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Model
+model User {
+  id        String    @id @default(uuid()) // Using UUID for IDs as discussed
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  events    Event[] // A user can create multiple events (one-to-many relationship)
+
+  @@map("users") // Maps this model to a 'users' table in the database
+}
+
+// Event Model
+model Event {
+  id          String    @id @default(uuid()) // Using UUID for IDs
+  title       String
+  description String? // The '?' makes this field optional (nullable in DB)
+  eventDate   DateTime  @map("event_date") @db.Date // Store only date
+  eventTime   DateTime  @map("event_time") @db.Time(3) // Store only time, precision 3 for milliseconds
+  location    String
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Relationship to User: An event belongs to one user
+  createdBy   User      @relation(fields: [createdById], references: [id])
+  createdById String    @map("created_by_id") // Foreign key column
+
+  @@map("events") // Maps this model to an 'events' table in the database
+}
