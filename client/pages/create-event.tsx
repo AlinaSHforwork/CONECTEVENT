@@ -64,12 +64,21 @@ const CreateEventPage: React.FC = () => {
       setLocation('');
       // Перенаправити на дашборд після успішного створення події
       router.push('/dashboard');
-    // @ts-ignore
-     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to create event. Please try again.');
-      console.error('Create event error:', err);
-    }
+
+    } catch (err: unknown) {
+  if (err instanceof Error) { // Перевірка, чи err є екземпляром Error
+    setError(err.message || 'Failed to create event. Please try again.');
+    console.error('Create event error:', err);
+  } else if (typeof err === 'object' && err !== null && 'response' in err && typeof (err as any).response === 'object' && (err as any).response !== null && 'data' in (err as any).response && typeof ((err as any).response as any).data === 'object' && ((err as any).response as any).data !== null && 'message' in ((err as any).response as any).data) {
+    // Якщо помилка є об'єктом з властивостями response.data.message
+    setError(((err as any).response.data.message) || 'Failed to create event. Please try again.');
+    console.error('Create event error:', err);
+  } else {
+    // Для інших невідомих типів помилок
+    setError('An unknown error occurred. Please try again.');
+    console.error('Create event error:', err);
+  }
+}
   };
 
   return (
