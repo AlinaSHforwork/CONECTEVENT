@@ -27,6 +27,8 @@ const SignupPage: React.FC = () => {
       localStorage.setItem('userEmail', res.data.user.email); // Store user email
       localStorage.setItem('userId', res.data.user.id); // Store user ID
       router.push('/dashboard'); // Redirect to a dashboard page after successful signup
+    // @ts-ignore
+     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.response?.data?.message || 'Signup failed. Please try again.');
       console.error('Signup error:', err);

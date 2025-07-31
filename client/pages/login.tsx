@@ -27,6 +27,8 @@ const LoginPage: React.FC = () => {
       localStorage.setItem('userEmail', res.data.user.email); // Store user email
       localStorage.setItem('userId', res.data.user.id); // Store user ID
       router.push('/dashboard'); // Redirect to a dashboard page after successful login
+    // @ts-ignore
+     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       // Перевіряємо, чи є відповідь та дані, щоб уникнути помилок
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
@@ -129,7 +131,7 @@ const LoginPage: React.FC = () => {
 
             <div className="mt-10 text-center">
               <p className="text-sm font-light text-gray-600">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link
                   href="/signup" // Посилання на сторінку реєстрації
                   className="text-gray-900 underline hover:no-underline font-light transition-all"
