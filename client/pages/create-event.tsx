@@ -65,21 +65,13 @@ const CreateEventPage: React.FC = () => {
       // Перенаправити на дашборд після успішного створення події
       router.push('/dashboard');
 
-    } catch (err: unknown) {
-  if (err instanceof Error) { // Перевірка, чи err є екземпляром Error
-    setError(err.message || 'Failed to create event. Please try again.');
-    console.error('Create event error:', err);
-  } else if (typeof err === 'object' && err !== null && 'response' in err && typeof (err as any).response === 'object' && (err as any).response !== null && 'data' in (err as any).response && typeof ((err as any).response as any).data === 'object' && ((err as any).response as any).data !== null && 'message' in ((err as any).response as any).data) {
-    // Якщо помилка є об'єктом з властивостями response.data.message
-    setError(((err as any).response.data.message) || 'Failed to create event. Please try again.');
-    console.error('Create event error:', err);
-  } else {
-    // Для інших невідомих типів помилок
-    setError('An unknown error occurred. Please try again.');
-    console.error('Create event error:', err);
-  }
-}
-  };
+    } 
+  
+    catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to create event. Please try again.');
+      console.error('Create event error:', err);
+      }
+    };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">

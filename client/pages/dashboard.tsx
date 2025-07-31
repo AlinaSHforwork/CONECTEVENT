@@ -31,39 +31,18 @@ const DashboardPage: React.FC = () => {
         setEvents(res.data.events);
         setLoading(false);
 
-} catch (err: unknown) {
-  // Встановлюємо isLoading в false незалежно від типу помилки
-  setLoading(false);
-  console.error('Fetch events error:', err);
-
-  // Перевіряємо, чи помилка має структуру AxiosError або схожу
-  if (
-    typeof err === 'object' &&
-    err !== null &&
-    'response' in err &&
-    typeof (err as any).response === 'object' &&
-    (err as any).response !== null
-  ) {
-    const apiError = err as { response: { status?: number; data?: { message?: string } } };
-
-    // Встановлюємо повідомлення про помилку
-    setError(apiError.response?.data?.message || 'Failed to fetch events');
-
-    // Якщо статус 401, токен, можливо, закінчився, перенаправляємо на сторінку входу
-    if (apiError.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userEmail');
-      localStorage.removeItem('userId');
-      router.push('/login');
-    }
-  } else if (err instanceof Error) {
-    // Якщо це стандартний об'єкт Error
-    setError(err.message || 'Failed to fetch events');
-  } else {
-    // Якщо тип помилки невідомий
-    setError('An unknown error occurred while fetching events. Please try again.');
-  }
-}
+      } catch (err: any) {
+        setError(err.response?.data?.message || 'Failed to fetch events');
+        setLoading(false);
+        console.error('Fetch events error:', err);
+      // If 401, token might be expired, redirect to login
+      if (err.response?.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userEmail');
+        localStorage.removeItem('userId');
+        router.push('/login');
+        }
+      }
     };
 
     fetchEvents();

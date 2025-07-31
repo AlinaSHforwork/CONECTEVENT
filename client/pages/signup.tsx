@@ -28,28 +28,10 @@ const SignupPage: React.FC = () => {
       localStorage.setItem('userId', res.data.user.id); // Store user ID
       router.push('/dashboard'); // Redirect to a dashboard page after successful signup
 
-} catch (err: unknown) {
-  console.error('Signup error:', err); // Записуємо помилку в консоль
-
-  // Перевіряємо, чи помилка має структуру AxiosError або схожу з властивістю 'response'
-  if (
-    typeof err === 'object' &&
-    err !== null &&
-    'response' in err &&
-    typeof (err as any).response === 'object' &&
-    (err as any).response !== null
-  ) {
-    // Якщо так, стверджуємо тип, щоб безпечно отримати доступ до message
-    const apiError = err as { response: { data?: { message?: string } } };
-    setError(apiError.response?.data?.message || 'Signup failed. Please try again.');
-  } else if (err instanceof Error) {
-    // Якщо це стандартний об'єкт Error
-    setError(err.message || 'Signup failed. Please try again.');
-  } else {
-    // Для інших невідомих типів помилок
-    setError('An unknown error occurred during signup. Please try again.');
-  }
-}
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Signup failed. Please try again.');
+      console.error('Signup error:', err);
+    }
   };
 
   return (
