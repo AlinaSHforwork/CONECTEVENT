@@ -1,11 +1,13 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+   "main": "dist/index.js", 
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc", 
+    "start": "node dist/index.js", 
+    "dev": "ts-node-dev --respawn src/index.ts", 
+    "prisma:generate": "npx prisma generate", 
+    "prisma:migrate-deploy": "npx prisma migrate deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
