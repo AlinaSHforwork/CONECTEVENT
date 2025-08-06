@@ -5,11 +5,30 @@ import cors from 'cors';
 import prisma from './lib/prisma';
 import authRoutes from './routes/authRoutes'; // Import auth routes
 import eventRoutes from './routes/eventRoutes'; // Import event routes
+import cron from 'node-cron'; // <-- Додайте цей імпорт
+import axios from 'axios'; // <-- Додайте axios для HTTP-запитів
 
 dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 const PORT = process.env.PORT || 5000; // Use port 5000 for backend 
+const BACKEND_URL = process.env.BACKEND_URL;
+
+// Перевірка, чи встановлено BACKEND_URL, щоб уникнути помилок
+if (BACKEND_URL) {
+  // Планування завдання: відправляти запит кожні 10 хвилин
+  cron.schedule('*/14 * * * *', async () => {
+    try {
+      console.log('Sending health check to backend...');
+      const response = await axios.get(BACKEND_URL); // <-- Відправляємо GET-запит на свій же URL
+      console.log(`Health check status: ${response.status}`);
+    } catch (error) {
+      console.error('Error during health check:', error);
+    }
+  });
+} else {
+  console.warn('BACKEND_URL is not set. Cron job for health check will not run.');
+}
 
 
 app.use(cors()); // Enable CORS for all routes (important for frontend communication)
