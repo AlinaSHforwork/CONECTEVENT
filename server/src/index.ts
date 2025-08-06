@@ -31,7 +31,13 @@ if (BACKEND_URL) {
 }
 
 
-app.use(cors()); // Enable CORS for all routes (important for frontend communication)
+const corsOptions = {
+    origin: 'https://eventhub-frontend-03km.onrender.com', // <-- Вставте сюди Live URL вашого фронтенду
+    optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions)); // Дозволити GET, POST, PUT тощо
+
 app.use(express.json()); // Enable JSON body parser
 
 // --- API Routes ---
