@@ -155,7 +155,7 @@ const DashboardPage: React.FC = () => {
           ) : (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {events.map((event) => (
-                <Link key={event.id} href={`/event/${event.id}`}> {/* Посилання на деталі події */}
+                /*<Link key={event.id} href={`/event/${event.id}`}> { Посилання на деталі події }*/
                   <div className="border border-gray-200 bg-white hover:border-gray-400 transition-all duration-300 cursor-pointer group">
                     <div className="p-8">
                       <div className="mb-6">
@@ -187,7 +187,7 @@ const DashboardPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </Link>
+                /*</Link>*/
               ))}
             </div>
           )}
